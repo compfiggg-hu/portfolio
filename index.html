@@ -1,203 +1,958 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pratham — Data Analytics Portfolio</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pratham Kanbargi — Data Analytics</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0a0a0b;
+      --surface: #111114;
+      --surface2: #18181d;
+      --border: #222228;
+      --border2: #2e2e38;
+      --text: #e8e8ec;
+      --text-muted: #6b6b7a;
+      --text-dim: #3a3a48;
+      --accent: #c8f060;
+      --accent2: #60c8f0;
+      --accent3: #f0a060;
+      --tag-bg: #1a1a22;
     }
-    
+
+    html { scroll-behavior: smooth; }
+
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Instrument Sans', sans-serif;
+      font-size: 15px;
       line-height: 1.6;
-      color: #333;
-      background: #f8f9fa;
+      overflow-x: hidden;
     }
-    
-    header {
-      background: linear-gradient(135deg, #1D9E75 0%, #0d5a47 100%);
-      color: white;
-      padding: 60px 20px;
-      text-align: center;
+
+    /* NOISE TEXTURE */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.4;
     }
-    
-    header h1 {
-      font-size: 2.5em;
-      margin-bottom: 10px;
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 48px;
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.3s, background 0.3s;
     }
-    
-    header p {
-      font-size: 1.1em;
-      opacity: 0.95;
+    nav.scrolled {
+      background: rgba(10,10,11,0.92);
+      backdrop-filter: blur(12px);
+      border-color: var(--border);
     }
-    
-    .container {
-      max-width: 1000px;
-      margin: 40px auto;
-      padding: 0 20px;
+    .nav-logo {
+      font-family: 'DM Serif Display', serif;
+      font-size: 18px;
+      color: var(--text);
+      text-decoration: none;
+      letter-spacing: -0.02em;
     }
-    
-    .intro {
-      background: white;
-      padding: 30px;
-      border-radius: 8px;
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 13px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--text); }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 0 48px 80px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-grid-bg {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 60px 60px;
+      opacity: 0.3;
+      mask-image: radial-gradient(ellipse 80% 60% at 50% 100%, black 0%, transparent 70%);
+    }
+
+    .hero-glow {
+      position: absolute;
+      bottom: -200px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 800px;
+      height: 500px;
+      background: radial-gradient(ellipse, rgba(200,240,96,0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-eyebrow {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      color: var(--accent);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.2s forwards;
+    }
+
+    .hero-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(52px, 8vw, 108px);
+      line-height: 0.95;
+      letter-spacing: -0.03em;
+      color: var(--text);
+      margin-bottom: 32px;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.4s forwards;
+    }
+
+    .hero-title em {
+      font-style: italic;
+      color: var(--text-muted);
+    }
+
+    .hero-desc {
+      max-width: 480px;
+      color: var(--text-muted);
+      font-size: 15px;
+      line-height: 1.7;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.6s forwards;
       margin-bottom: 40px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
-    
-    .intro h2 {
-      color: #1D9E75;
-      margin-bottom: 15px;
+
+    .hero-meta {
+      display: flex;
+      gap: 40px;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.8s forwards;
     }
-    
+
+    .hero-meta-item {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .hero-meta-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      color: var(--text-dim);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .hero-meta-value {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .scroll-indicator {
+      position: absolute;
+      bottom: 32px;
+      right: 48px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      color: var(--text-dim);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      opacity: 0;
+      animation: fadeIn 1s 1.2s forwards;
+    }
+
+    .scroll-line {
+      width: 40px;
+      height: 1px;
+      background: var(--border2);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .scroll-line::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: var(--accent);
+      animation: scrollSlide 2s 1.5s infinite;
+    }
+
+    @keyframes scrollSlide {
+      0% { left: -100%; }
+      100% { left: 100%; }
+    }
+
+    /* SECTION WRAPPER */
+    section {
+      position: relative;
+      z-index: 1;
+    }
+
+    .section-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 100px 48px;
+    }
+
+    .section-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      color: var(--accent);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+      max-width: 60px;
+    }
+
+    .section-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(32px, 4vw, 52px);
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin-bottom: 60px;
+      line-height: 1.1;
+    }
+
+    /* SKILLS STRIP */
+    .skills-strip {
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+      padding: 0 48px;
+      overflow: hidden;
+    }
+
+    .skills-track {
+      display: flex;
+      gap: 0;
+      animation: marquee 20s linear infinite;
+      width: max-content;
+    }
+
+    .skills-track:hover { animation-play-state: paused; }
+
+    .skill-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 40px;
+      border-right: 1px solid var(--border);
+      white-space: nowrap;
+      font-family: 'DM Mono', monospace;
+      font-size: 12px;
+      color: var(--text-muted);
+      letter-spacing: 0.05em;
+    }
+
+    .skill-dot {
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--accent);
+      flex-shrink: 0;
+    }
+
+    @keyframes marquee {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* PROJECTS */
     .projects-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 30px;
-      margin-bottom: 40px;
+      gap: 2px;
     }
-    
+
     .project-card {
-      background: white;
-      border-radius: 8px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 48px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 32px;
+      align-items: start;
+      transition: border-color 0.3s, background 0.3s;
+      position: relative;
       overflow: hidden;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      transition: transform 0.3s, box-shadow 0.3s;
-    }
-    
-    .project-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 4px 16px rgba(0,0,0,0.15);
-    }
-    
-    .project-header {
-      background: #1D9E75;
-      color: white;
-      padding: 20px;
-      border-bottom: 4px solid #0d5a47;
-    }
-    
-    .project-header h3 {
-      font-size: 1.3em;
-      margin-bottom: 5px;
-    }
-    
-    .project-header p {
-      font-size: 0.9em;
-      opacity: 0.9;
-    }
-    
-    .project-body {
-      padding: 20px;
-    }
-    
-    .project-body p {
-      margin-bottom: 15px;
-      color: #666;
-    }
-    
-    .tech-stack {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-bottom: 15px;
-    }
-    
-    .tech-tag {
-      background: #f0f0f0;
-      color: #333;
-      padding: 4px 10px;
-      border-radius: 20px;
-      font-size: 0.85em;
-      border: 1px solid #ddd;
-    }
-    
-    .links {
-      display: flex;
-      gap: 15px;
-      margin-top: 15px;
-    }
-    
-    .links a {
-      color: #1D9E75;
       text-decoration: none;
-      font-weight: 600;
-      transition: color 0.3s;
+      color: inherit;
     }
-    
-    .links a:hover {
-      color: #0d5a47;
-      text-decoration: underline;
+
+    .project-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
     }
-    
+
+    .project-card:hover {
+      border-color: var(--border2);
+      background: var(--surface2);
+    }
+
+    .project-card:hover::before { opacity: 1; }
+
+    .project-card.wip {
+      opacity: 0.5;
+    }
+
+    .project-card.wip::before {
+      background: linear-gradient(90deg, transparent, var(--text-dim), transparent);
+    }
+
+    .project-number {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      color: var(--text-dim);
+      letter-spacing: 0.1em;
+      margin-bottom: 20px;
+    }
+
+    .project-question {
+      font-family: 'DM Serif Display', serif;
+      font-size: 13px;
+      font-style: italic;
+      color: var(--accent);
+      margin-bottom: 10px;
+      letter-spacing: 0em;
+    }
+
+    .project-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(22px, 3vw, 30px);
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin-bottom: 16px;
+      line-height: 1.2;
+    }
+
+    .project-desc {
+      color: var(--text-muted);
+      font-size: 14px;
+      line-height: 1.7;
+      max-width: 520px;
+      margin-bottom: 24px;
+    }
+
+    .project-finding {
+      background: rgba(200, 240, 96, 0.05);
+      border-left: 2px solid var(--accent);
+      padding: 14px 18px;
+      margin-bottom: 24px;
+      max-width: 520px;
+    }
+
+    .project-finding-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 9px;
+      color: var(--accent);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .project-finding-text {
+      font-size: 13px;
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    .project-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 28px;
+    }
+
+    .tag {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      color: var(--text-muted);
+      background: var(--tag-bg);
+      border: 1px solid var(--border);
+      padding: 4px 10px;
+      letter-spacing: 0.06em;
+    }
+
+    .project-links {
+      display: flex;
+      gap: 16px;
+    }
+
+    .project-link {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      color: var(--text-muted);
+      text-decoration: none;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 2px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    .project-link:hover {
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+
+    .project-link-arrow {
+      transition: transform 0.2s;
+    }
+
+    .project-link:hover .project-link-arrow {
+      transform: translate(2px, -2px);
+    }
+
+    .project-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 16px;
+    }
+
+    .project-status {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 6px 12px;
+      border: 1px solid;
+    }
+
+    .project-status.complete {
+      color: var(--accent);
+      border-color: rgba(200,240,96,0.3);
+      background: rgba(200,240,96,0.05);
+    }
+
+    .project-status.wip-badge {
+      color: var(--text-dim);
+      border-color: var(--border);
+    }
+
+    .project-year {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      color: var(--text-dim);
+    }
+
+    /* ABOUT */
+    .about-section {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: start;
+    }
+
+    .about-text p {
+      color: var(--text-muted);
+      font-size: 15px;
+      line-height: 1.8;
+      margin-bottom: 20px;
+    }
+
+    .about-text p:last-child { margin-bottom: 0; }
+
+    .about-text strong {
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2px;
+    }
+
+    .stat-box {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      padding: 28px 24px;
+    }
+
+    .stat-number {
+      font-family: 'DM Serif Display', serif;
+      font-size: 36px;
+      color: var(--text);
+      letter-spacing: -0.03em;
+      margin-bottom: 4px;
+    }
+
+    .stat-number span {
+      color: var(--accent);
+    }
+
+    .stat-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      color: var(--text-dim);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    /* CONTACT */
+    .contact-section {
+      border-top: 1px solid var(--border);
+    }
+
+    .contact-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 100px 48px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+
+    .contact-heading {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(36px, 5vw, 64px);
+      letter-spacing: -0.03em;
+      line-height: 1.0;
+      color: var(--text);
+    }
+
+    .contact-heading em {
+      font-style: italic;
+      color: var(--text-muted);
+    }
+
+    .contact-details {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .contact-item {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .contact-item-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      color: var(--text-dim);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .contact-item-value {
+      font-size: 15px;
+      color: var(--text-muted);
+    }
+
+    .contact-item-value a {
+      color: var(--text-muted);
+      text-decoration: none;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 1px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    .contact-item-value a:hover {
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+
+    /* FOOTER */
     footer {
-      background: #f0f0f0;
-      text-align: center;
-      padding: 30px 20px;
-      margin-top: 60px;
-      color: #666;
+      border-top: 1px solid var(--border);
+      padding: 24px 48px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
-    
-    .highlight {
-      color: #1D9E75;
-      font-weight: 600;
+
+    .footer-copy {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      color: var(--text-dim);
+      letter-spacing: 0.06em;
+    }
+
+    .footer-stack {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      color: var(--text-dim);
+      letter-spacing: 0.06em;
+    }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      nav { padding: 16px 24px; }
+      .nav-links { display: none; }
+      .hero { padding: 0 24px 64px; }
+      .section-inner { padding: 64px 24px; }
+      .project-card { padding: 32px 24px; grid-template-columns: 1fr; }
+      .project-right { align-items: flex-start; flex-direction: row; }
+      .about-grid { grid-template-columns: 1fr; gap: 48px; }
+      .contact-inner { grid-template-columns: 1fr; gap: 48px; padding: 64px 24px; }
+      footer { padding: 20px 24px; flex-direction: column; gap: 8px; text-align: center; }
+      .skills-strip { padding: 0 24px; }
     }
   </style>
 </head>
 <body>
-  <header>
-    <h1>Pratham</h1>
-    <p>Data Analytics Portfolio</p>
-  </header>
 
-  <div class="container">
-    <div class="intro">
-      <h2>About</h2>
-      <p>
-        M.Com in Accounting & Finance | CA Inter background | 
-        <span class="highlight">Intermediate R</span> | 
-        <span class="highlight">BigQuery/SQL</span> | 
-        <span class="highlight">Tableau</span>
-      </p>
-      <p style="margin-top: 15px; color: #666;">
-        Focused on BFSI, fintech, and operations analytics. Three portfolio projects 
-        analyzing real government data: banking sector stress resolution, tourism recovery patterns, 
-        and tax revenue efficiency.
-      </p>
+  <!-- NAV -->
+  <nav id="nav">
+    <a href="#" class="nav-logo">PK</a>
+    <ul class="nav-links">
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-grid-bg"></div>
+    <div class="hero-glow"></div>
+    <p class="hero-eyebrow">Data Analytics Portfolio</p>
+    <h1 class="hero-title">Pratham<br /><em>Kanbargi</em></h1>
+    <p class="hero-desc">
+      Turning raw datasets into clear, evidence-based stories.
+      Focused on government, financial, and business data — where analysis drives real decisions.
+    </p>
+    <div class="hero-meta">
+      <div class="hero-meta-item">
+        <span class="hero-meta-label">Location</span>
+        <span class="hero-meta-value">Belagavi, Karnataka</span>
+      </div>
+      <div class="hero-meta-item">
+        <span class="hero-meta-label">Background</span>
+        <span class="hero-meta-value">M.Com · CA Inter</span>
+      </div>
+      <div class="hero-meta-item">
+        <span class="hero-meta-label">Stack</span>
+        <span class="hero-meta-value">R · SQL · Tableau · BigQuery</span>
+      </div>
     </div>
+    <div class="scroll-indicator">
+      <div class="scroll-line"></div>
+      Scroll
+    </div>
+  </section>
 
-    <div class="projects-grid">
-      <!-- Project 1 -->
-      <div class="project-card">
-        <div class="project-header">
-          <h3>NPA Banking Analysis</h3>
-          <p>Did IBC 2016 Actually Work?</p>
-        </div>
-        <div class="project-body">
-          <p>
-            Statistical analysis of Non-Performing Assets across PSU, Private, 
-            and Foreign banks (2012–2024). Examines whether the Insolvency and 
-            Bankruptcy Code had measurable impact on NPA recovery.
-          </p>
-          <div class="tech-stack">
-            <span class="tech-tag">R</span>
-            <span class="tech-tag">RBI Data</span>
-            <span class="tech-tag">Tableau</span>
-            <span class="tech-tag">Statistical Analysis</span>
+  <!-- SKILLS MARQUEE -->
+  <div class="skills-strip">
+    <div class="skills-track">
+      <div class="skill-item"><span class="skill-dot"></span>R / RStudio</div>
+      <div class="skill-item"><span class="skill-dot"></span>SQL</div>
+      <div class="skill-item"><span class="skill-dot"></span>BigQuery</div>
+      <div class="skill-item"><span class="skill-dot"></span>Tableau</div>
+      <div class="skill-item"><span class="skill-dot"></span>Excel</div>
+      <div class="skill-item"><span class="skill-dot"></span>Statistical Analysis</div>
+      <div class="skill-item"><span class="skill-dot"></span>BFSI Analytics</div>
+      <div class="skill-item"><span class="skill-dot"></span>Data Visualization</div>
+      <div class="skill-item"><span class="skill-dot"></span>Financial Modelling</div>
+      <div class="skill-item"><span class="skill-dot"></span>M.Com · Accounting & Finance</div>
+      <!-- duplicate for seamless loop -->
+      <div class="skill-item"><span class="skill-dot"></span>R / RStudio</div>
+      <div class="skill-item"><span class="skill-dot"></span>SQL</div>
+      <div class="skill-item"><span class="skill-dot"></span>BigQuery</div>
+      <div class="skill-item"><span class="skill-dot"></span>Tableau</div>
+      <div class="skill-item"><span class="skill-dot"></span>Excel</div>
+      <div class="skill-item"><span class="skill-dot"></span>Statistical Analysis</div>
+      <div class="skill-item"><span class="skill-dot"></span>BFSI Analytics</div>
+      <div class="skill-item"><span class="skill-dot"></span>Data Visualization</div>
+      <div class="skill-item"><span class="skill-dot"></span>Financial Modelling</div>
+      <div class="skill-item"><span class="skill-dot"></span>M.Com · Accounting & Finance</div>
+    </div>
+  </div>
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <div class="section-inner">
+      <p class="section-label reveal">Work</p>
+      <h2 class="section-title reveal">Projects</h2>
+
+      <div class="projects-grid">
+
+        <!-- PROJECT 1: NPA -->
+        <div class="project-card reveal">
+          <div class="project-left">
+            <p class="project-number">01</p>
+            <p class="project-question">Did IBC 2016 Actually Work?</p>
+            <h3 class="project-title">NPA Banking Analysis</h3>
+            <p class="project-desc">
+              Statistical analysis of Non-Performing Assets across PSU, Private, and Foreign banks
+              from 2012–2024. Examines whether the Insolvency and Bankruptcy Code had a measurable
+              impact on NPA recovery and which bank segments responded differently.
+            </p>
+            <div class="project-finding">
+              <p class="project-finding-label">Key Finding</p>
+              <p class="project-finding-text">Private Sector Banks recovered 58% faster than PSU banks post-peak, despite starting from lower stress levels.</p>
+            </div>
+            <div class="project-tags">
+              <span class="tag">R</span>
+              <span class="tag">RBI Data</span>
+              <span class="tag">Tableau</span>
+              <span class="tag">Statistical Analysis</span>
+            </div>
+            <div class="project-links">
+              <a href="https://github.com/compfiggg-hu/npa-banking-analysis" target="_blank" class="project-link">
+                GitHub <span class="project-link-arrow">↗</span>
+              </a>
+              <a href="https://public.tableau.com/views/NPABankingAnalysis/Dashboard1?:language=en-US&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link" target="_blank" class="project-link">
+                Tableau <span class="project-link-arrow">↗</span>
+              </a>
+            </div>
           </div>
-          <p style="font-size: 0.9em; color: #999;">
-            <strong>Key Finding:</strong> Private Sector Banks recovered 58% faster 
-            than PSU banks post-peak, despite starting from lower stress levels.
+          <div class="project-right">
+            <span class="project-status complete">Complete</span>
+            <span class="project-year">2026</span>
+          </div>
+        </div>
+
+        <!-- PROJECT 2: TOURISM -->
+        <div class="project-card reveal">
+          <div class="project-left">
+            <p class="project-number">02</p>
+            <p class="project-question">Did India's Tourism Recover Equally After COVID?</p>
+            <h3 class="project-title">Tourism Recovery Analysis</h3>
+            <p class="project-desc">
+              State-level analysis of India's domestic and international tourism patterns from 2019–2022.
+              Examines recovery trajectories, regional disparities, and structural shifts in travel
+              behaviour following the pandemic — with implications for state revenue and marketing strategy.
+            </p>
+            <div class="project-finding">
+              <p class="project-finding-label">Key Finding</p>
+              <p class="project-finding-text">Domestic tourism fully recovered by 2021 — foreign tourism still 40% below 2019 as of 2022. Lakshadweep and small UTs surged 300%+ due to pent-up island demand; major metros rebounded fastest due to international connectivity.</p>
+            </div>
+            <div class="project-tags">
+              <span class="tag">R</span>
+              <span class="tag">Government Data</span>
+              <span class="tag">Tableau</span>
+              <span class="tag">Time Series</span>
+            </div>
+            <div class="project-links">
+              <a href="https://github.com/compfiggg-hu/india_tourism_recovery" target="_blank" class="project-link">GitHub <span class="project-link-arrow">↗</span></a>
+              <a href="https://public.tableau.com/views/IndiaTourismRecoveryPost-COVIDStateAnalysis/Dashboard1?:language=en-US&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link" target="_blank" class="project-link">Tableau <span class="project-link-arrow">↗</span></a>
+            </div>
+          </div>
+          <div class="project-right">
+            <span class="project-status complete">Complete</span>
+            <span class="project-year">2026</span>
+          </div>
+        </div>
+
+        <!-- PROJECT 3: COHORT -->
+        <div class="project-card wip reveal">
+          <div class="project-left">
+            <p class="project-number">03</p>
+            <p class="project-question">Where Do Customers Actually Drop Off?</p>
+            <h3 class="project-title">Cohort & Retention Analysis</h3>
+            <p class="project-desc">
+              Cohort-based analysis examining user retention patterns, churn behaviour,
+              and revenue concentration across customer segments. Translates raw transaction
+              data into actionable business intelligence.
+            </p>
+            <div class="project-tags">
+              <span class="tag">SQL</span>
+              <span class="tag">BigQuery</span>
+              <span class="tag">Tableau</span>
+              <span class="tag">Cohort Analysis</span>
+            </div>
+          </div>
+          <div class="project-right">
+            <span class="project-status wip-badge">In Progress</span>
+            <span class="project-year">2026</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about" class="about-section">
+    <div class="section-inner">
+      <p class="section-label reveal">Background</p>
+      <h2 class="section-title reveal">About</h2>
+      <div class="about-grid">
+        <div class="about-text reveal">
+          <p>
+            M.Com graduate in <strong>Accounting & Finance</strong> from KLS Gogte College of Commerce, Belagavi,
+            with a CA Inter background. Chose to enter the workforce focused on data analytics
+            rather than continue the CA track — specifically at the intersection of <strong>finance and data</strong>.
           </p>
-          <div class="links">
-            <a href="https://github.com/compfiggg-hu/npa-banking-analysis">GitHub</a>
-            <a href="https://public.tableau.com/views/NPABankingAnalysis/Dashboard1?:language=en-US&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link">Tableau</a>
+          <p>
+            Projects use real government and regulatory datasets — RBI, Ministry of Tourism —
+            because working with clean, curated toy datasets tells you nothing about how
+            messy real analysis actually is.
+          </p>
+          <p>
+            Currently building toward roles in <strong>data and financial analytics</strong> — where domain
+            knowledge of accounting and finance gives an edge over pure technical profiles.
+          </p>
+        </div>
+        <div class="stats-grid reveal">
+          <div class="stat-box">
+            <div class="stat-number">3<span>+</span></div>
+            <div class="stat-label">Portfolio Projects</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-number">4</div>
+            <div class="stat-label">Core Tools</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-number">2<span>+</span></div>
+            <div class="stat-label">Years Finance Study</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-number" style="font-size:24px; padding-top:4px">BFSI</div>
+            <div class="stat-label">Primary Domain</div>
           </div>
         </div>
       </div>
+    </div>
+  </section>
 
-    
+  <!-- CONTACT -->
+  <section id="contact" class="contact-section">
+    <div class="contact-inner">
+      <div class="reveal">
+        <h2 class="contact-heading">Let's<br /><em>connect.</em></h2>
+      </div>
+      <div class="contact-details reveal">
+        <div class="contact-item">
+          <span class="contact-item-label">Email</span>
+          <span class="contact-item-value"><a href="mailto:kanbargipratham@gmail.com">kanbargipratham@gmail.com</a></span>
+        </div>
+        <div class="contact-item">
+          <span class="contact-item-label">LinkedIn</span>
+          <span class="contact-item-value"><a href="https://www.linkedin.com/in/pratham-kanbargi-8a535b280" target="_blank">linkedin.com/in/pratham-kanbargi</a></span>
+        </div>
+        <div class="contact-item">
+          <span class="contact-item-label">GitHub</span>
+          <span class="contact-item-value"><a href="https://github.com/compfiggg-hu" target="_blank">github.com/compfiggg-hu</a></span>
+        </div>
+        <div class="contact-item">
+          <span class="contact-item-label">Location</span>
+          <span class="contact-item-value">Belagavi, Karnataka · Open to remote</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <span class="footer-copy">© 2026 Pratham Kanbargi</span>
+    <span class="footer-stack">Built with HTML · CSS · JS</span>
+  </footer>
+
+  <script>
+    // Nav scroll effect
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 40);
+    });
+
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => {
+            entry.target.classList.add('visible');
+          }, 80);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+    reveals.forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
